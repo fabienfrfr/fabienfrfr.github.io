@@ -1,5 +1,7 @@
 ## Welcome to My GitHub Pages
 
+I am a complex systems physicist with a particular interest in interdisciplinary projects. I am interested in artificial intelligence, evo-devo and education. You can see my artistic work on Instagram blog ([@fabienfrfr](https://www.instagram.com/fabienfrfr/)) and a prototype of neural game in Itch.io [@fabienfrfr](https://fabienfrfr.itch.io/).
+
 You can use the [editor on GitHub](https://github.com/fabienfrfr/fabienfrfr.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
