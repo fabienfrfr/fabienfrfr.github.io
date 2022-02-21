@@ -15,7 +15,7 @@ language: english
 format: web
 
 # the little icon that appears in the browser window's tab
-favicon: assets/favicon.ico
+favicon: assets/favicon.png
 
 ############# TOP NAVIGATION BAR ################
 
