@@ -2,7 +2,7 @@
 
 I am a complex systems physicist with a particular interest in interdisciplinary projects. I am interested in artificial intelligence, evo-devo and education. You can see my artistic work on Instagram blog ([@fabienfrfr](https://www.instagram.com/fabienfrfr/)) and a prototype of neural game in Itch.io [@fabienfrfr](https://fabienfrfr.itch.io/).
 
-See me Heroku Python Web app [here](https://fabienfrfr.herokuapp.com/hello)
+See me Heroku Python Web app [here](https://fabienfrfr.herokuapp.com)
 
 # WORK IN PROGRESS ...
 
