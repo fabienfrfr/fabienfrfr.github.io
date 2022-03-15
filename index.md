@@ -6,18 +6,19 @@ See me Heroku Python Web app [here](https://fabienfrfr.herokuapp.com)
 
 # WORK IN PROGRESS ...
 
-# Titre
+# Guide du DataScientist
 
-Enoncé du problème et objectif général
+Enoncer l'introduction du problème, les données à disposition (brièvement), les contraintes (temps, puissance de calcul et mémoire de stockage) et l'objectif général (Collecte de donnée, analyse statistique exploratoire, contruction d'un modèle prédictif, etc.).
 
 
 ```python
-import os
+## import os
 import pandas as pd, numpy as np
 import pylab as plt, seaborn as sns
 import geopandas as gpd, networkx as nx
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.gridspec as gridspec
+from pyvis import network as net
 
 # exploration
 from scipy.stats import ttest_ind
@@ -51,52 +52,212 @@ pd.set_option('display.max_column', 200)
 
 ## 1. Data Collection
 
-Link INSEE, France Data, Kaggle Dataset, WebScrapling, Yahoo Finance...
+Lorsque les données proviennes d'une base sous format fichier (Kaggle, INSEE, Yahoo Finance, France Data, etc.), indiquer le lien sous forme de liste à puce: 
+- Contenu du fichier (type csv, excell) : [file_name/interested_sheet](https://www.link.fr/)
+- etc.
+
+Lorsque les données sont dans une base SQL, HDFS ou Spark, ou à extraire d'un contenu Web (Scraping), il convient de préparer les donnée sous un format adapté à l'analyse de donnée (moteur, conversion, etc.). Dans le cas du Web scraping, il est préférable de construire la base de donnée à partir d'un code python à part.
+
+
+```python
+#### SQL
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://postgres:myPassword@localhost/database_name')
+
+#### Distributed computing
+# Spark
+from pyspark.sql import SparkSession
+sc = SparkSession.builder.master("local[1]").appName('SparkByExamples.com').getOrCreate()
+
+#### Web scraping
+from bs4 import BeautifulSoup as bs
+import requests
+
+html_address = "https://fr.wikipedia.org/wiki/link"
+r = requests.get(html_address)
+soup = bs(r.content, 'html.parser')
+
+# extract content
+contents = soup.prettify()
+table = soup.find_all(class_ = 'parent_tag')
+for t in table :
+    list_ = table.select('child_tag')
+    for l in list_ :
+        row_ = {}
+        row = l.find_all('subtag')
+        for i,r in row.items() :
+            sub_content = r.getText("", strip=True)
+            # clean & store
+            row_[i] = sub_content.replace('\n', ' ').replace('\t', '')
+```
 
 ### 1-a. Data knowledge
 
-Wikipedia
+Noter les connaissances à disposition sur les données en question, se baser principalement sur Wikipédia. Dans certain cas, utiliser les rapports à disposition sur les donnée (exemple : INSEE, article, etc.).
+
+Faire des remarques sur les données, par exemple sur la taille des echantillons, les notions de proportion, etc. L'idée est de mettre en avant la possibilité d'avoir des variables cachées dans les données pouvant nous tromper sur les mesures de corrélation future. Le cas le plus courant correspond au **paradoxe de Simpson**, un phénomène observé lorsque la tendance de plusieurs groupes s'inverse lorsque les groupes sont combinés :
+
+$$f<g, sup(f) < inf(g), Alors \exists (P,Q), E_P (f) > E_Q (g)$$
+
+Enfin, il est toujours possible d'ajouter des variables supplémentaires provenant d'autre base de donnée. Par exemple, nous pouvons ajouter des données géographiques d'openstreetmap [openstreetmap](https://www.data.gouv.fr/fr/datasets/decoupage-administratif-communal-francais-issu-d-openstreetmap/) ou de graphe (réseau, chaine de Markov, etc.) si le problème s'y porte bien, cela peut au moins faciliter la visualisation des données.
 
 ### 1-b. Data overview
 
-- Spreadsheet vizualization
-- Variable list (scale, dependency, type)
-- Objectif mesurable
+**Spreadsheet vizualization :**
+
+Visualiser les données sur un tableurs (Excel, Calc, etc.) avant de se lancer dans une quelquonque analyse. Identifier en premiers une variable permettant de joindre les fichiers entres eux, elle est principalement qualitative (object : string) ou encore à valeur entiere (int). Pour chacun des fichiers (s'il y en a), noter :
+
+- La liste des variables : Leurs types, la notion d'echelle, leurs dépendance et enfin en quoi l'ensemble corresponds (categorie).
+- La liste des variables regroupable en nouvelles variables (à partir d'un seuil, etc.).
+- etc.
+
+***Objectifs :*** Enoncer les sous-problemes à partir de ce que l'on vient d'apprendre sur les données (Comment ... ?).
 
 ### 1-c. Data importation
 
 
 ```python
-dataf = pd.read_csv(os.getcwd() + '/file.csv')
-dataf = pd.read_excel('path.excel', sheet_name=['name'])
-geodf = gpd.read_file("path.shp")
+## csv
+data_csv = pd.read_csv(os.getcwd() + '/file.csv')
+
+## excel
+xls_file = pd.ExcelFile('path.xls')
+data_xls = pd.read_excel(xls_file, sheet_name=['name'], skiprows=list(range(16)))
+
+## geographic
+data_geo = gpd.read_file("path.shp")
+
+## sql
+data_sql = pd.read_sql('SELECT * FROM table LIMIT 3', engine)
+
+## Spark
+data_spk = sc.select("*").toPandas()
 ```
+
+##### Copy data for easy testing
 
 
 ```python
-## basic statistic
-data.describes() # all
-print(dataf['columns'].sum())
-dataf.groupby(['columns1','columns2']).agg(['mean','std']) # pivot table of specifics feature
+data = [data_csv.copy(), data_xls.copy(), data_geo.copy(), data_sql.copy(), data_spk.copy()]
 ```
+
+##### Showing basic informations
+
+
+```python
+## Statistique descriptive
+for d in data :
+    display(d.describe())
+
+## Résultat Naïf
+d[['columns1','columns2']].sum() / d['columns3'].sum()
+
+## Tableau croisé dynamique
+d.groupby(['columns1','columns2']).agg(['mean','std'])
+```
+
+**Observation :** Pour chacun des éléments décrire ce que l'on mesure (résultats). Enoncer si la taille des echantillons sont différents, les ecarts moyennes globale/locale, s'il y a besoin de normaliser les données.
 
 ### 1-d. Data pre-analysis
 
+Preparer les données à une analyse exploratoire (Correlation, Distribution) et inférentielle (Test d'hypothese et Intervalle de confiance).
+
+##### Simplify dataframe
+
+Enlever les colonnes inutiles (superficial label) et standardiser et formater la nomenclature de jointure (merge).
+
 
 ```python
-## new feature
-dataf['new_columns'] = dataf['columns A'] / dataf['columns B']
-dataf.insert(1, 'new_columns', dataf[['A','B']].idxmax(1)) # feature 2 labels variables
-## specifics visualization
-geodf = geodf.merge(dataf[['ON', 'new']], how='inner', on='ON')
-geo_df[geo_df.ON.str[:2] != "97"].plot(ax = ax, categorical=True, column = "Results", legend=True)
-#### simplify dataset (bonus : scipy.interpolate)
-data = data.drop(columns=columns_list)
-""" you can create columns by group "Missing indicator" if empty info (ex : confidential data), it's becaume data information """
-# interpolate data & verification
-data = (data1['var_list'] + data2['var_list']) / 2 # good order (simplify data)
-sns.catplot(data = pd.concat([data1['specVar'],data['specVar'],data2['specVar']], axis=1), kind="violin")
+# drop all unusual object columns
+df.drop(columns=columns[:index+1], inplace=True)
+
+# standardize (here geographic exemple by modulo str digit like "{:02d}".format(values))
+merger_series  = df[column1].str.zfill(2) + df[column2].astype(str).str.zfill(3)
+df.insert(0, 'merge_column' , merger_series)
+
+# rename columns
+df.rename(columns={'old_name_column':'merge_column'}, inplace=True)
 ```
+
+##### Create variable
+
+Dans certain cas et suivant les connaissance du probleme, il est possible de combiner des colonnes en une seule, cela permet de reduire l'information. Ces nouvelles variables peuvent aussi bien quantitative (ex : valeurs mediane de plusieurs colonne) ou qualitative (nom de la meilleur colonne parmit plusieurs colonnes). Aussi, il est possible que des lignes soient vides, creer une variables indiquant laquelle est vide ou non, permet d'ajouter une nouvelle information pour notre analyse. Enfin, lorsqu'il y a des données continues manquantes, mais que l'on a des données qui permetrait d'interpoler (exemple : 2 datasets à deux moments différents), nous pouvons réaliser un ajustement linéaire, attention toutefois à regrouper des catégories au préalable si necessaire.
+
+
+```python
+## create best columns name
+df["best_columns"] = df[['columnA','columnB']].idxmax(1).astype("category")
+
+## create empty variable indicator
+df["empty"] = (df.isna().sum(axis=1) < thresh).replace({True: 'empty', False: 'full'})
+
+## find median values of columns (error here)
+cumsum = df[['c1','c2','c3']].apply(lambda x : np.cumsum(x), axis=1)
+df["median_columns"] = df[['c1','c2','c3']].med(1)
+
+## combine 2 colomns
+arr = df.values ; new_arr = arr[:,1::2]+arr[:,2::2] # 1st subcategory
+df_ = pd.DataFrame(arr, columns=['catA_'+str(int(i/2)) if i%2==0 else 'catB_'+str(int(i/2)) 
+                                 for i in range(arr.shape[0]/2)]) # 2nd subcategory %2
+## interpolate by mean
+arr_bis = df_bis.values ; new_arr = (arr + arr_bis)/2
+df_ = pd.DataFrame(new_arr, columns=df.columns)
+
+## Measurment of qualitative new variable (exemple)
+df["best_columns"].value_counts() / df["best_columns"].value_counts().sum()
+```
+
+**Observation :** Lorsqu'on creer de nouvelle variable, il est interessant de mesurer directement ici la statistique de moyenne pour les valeurs qualitatives. Pour les autres, il est necessaire de voir plus en detail dans les parties suivante.
+
+##### Normalized data
+
+Lorsque les colonnes sont connecté entre elle par une colonne, il est preferable de normaliser, cela permet de conserver les informations relatives, tout en gardant la colonne d'echelle. Ici, ce n'est pas à confondre avec la standardisation des données. On distingue plusieurs méthodes détaillé ici :
+
+
+```python
+## Lorsqu'on a que quelque colonne
+to_norm_col = ['c1','c2','c3']
+df[to_norm_col] = df[to_norm_col].div(df["Scale"], axis=0)
+
+## Lorsqu'on a beaucoup de colonne à partir d'un indice (ici 2)
+df.iloc[:,2:] = (df.iloc[:,2:]).div(data[1]["Scale"], axis=0)
+
+## Lorsqu'il n'existe pas de colonne d'echelle et mélangé avec colonne qualitative
+to_norm_col = df.select_dtypes('float').columns
+df[to_norm_col] = df[to_norm_col].div(df[to_norm_col].sum(axis=1), axis=0)
+
+## mesurment of scaling
+df[norm_col].mean()
+```
+
+**Observation :** Ici, c'est souvant notre derniere mesure des effets de proportion. Ici nous pouvons justements comparer la formulation du paradoxe de Simpson.
+
+##### Basic visualization
+
+
+Permet de générer de l'intuition sur les données avant de faire une analyse approfondit. Dans le cas de données géographique, il est interessant de mesurer aussi bien les valeurs à plusieurs echelle (commune, departement, region, pays et global). Dans le cas de donnés de graphes, une visualisation des interactions permets d'avoir des idée. Aussi, il faut visualiser les nouvelles variables que l'on a creer si possible.
+
+
+```python
+## geographic representation local scale
+fig,ax = plt.subplots(figsize=(10, 10))
+geodf[geodf.CODE.str[:2] != "97"].plot(ax=ax, categorical=True, column = "best_columns", legend=True)
+
+## geographic representation up scale
+dep = geodf.dissolve(by='dep', aggfunc='sum')
+dep[geodf.dep != "97"].plot(ax=ax, categorical=True, column = "best_columns", legend=True)
+
+## network graph (social net, transport, Markov chain)
+G = nx.from_pandas_edgelist(df, 'Start', 'End')
+g = net.Network(notebook=True)
+nxg = nt.from_nx(nx_graph)
+g.from_nx(nxg); g.show("title.html")
+
+## Boxplot de certaine colonne (new variable essentially)
+sns.catplot(data=df[['c1','c2','c3']],  kind="box")
+```
+
+**Observation :** Ces outils et ces observations seront importantes en cas de visualisation du modele pour comparer.
 
 ### 1-e. Data compilation
 
@@ -252,6 +413,12 @@ X_test, y_test = preprocessing(testset)
 
 ### 4-a. Basic model testing
 
+$$ t \subset \bigcup \mathbb{R} \cap \alpha \in \cdots \lim_{n \to \infty} \frac{b-a}{n} \sum_{k=1}^{n} \sqrt[n]{\left \| a + k \frac{b-a}{n} \right \|} \mapsto \int_{a}^{b} \sqrt[n]{\| t \|} \partial x \Leftrightarrow \begin{matrix}
+a & b & c\\ 
+d & e & f\\ 
+g & h & i
+\end{matrix}$$
+
 
 ```python
 def evalutation(model) :
@@ -291,7 +458,7 @@ pd.DataFrame(test_model.feature_importances_, index=X_train.columns).plot.bar(fi
 ---
 *When the precision, recall and f1-score is > 50% (convergence of Law of large numbers), the dataset it's good*
 
-### 4-b. Pipeline ensemble learning
+### 4-b. Ensemble learning
 
 Pipeline = Transformer+Estimator chain
 
@@ -438,6 +605,9 @@ Possible amelioration (if more time)
 plot_var = {'df': 0 }
 %store plot_var
 ```
+
+
+
 
 ---
 
