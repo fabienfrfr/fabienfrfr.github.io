@@ -97,9 +97,9 @@ Noter les connaissances à disposition sur les données en question, se baser pr
 
 Faire des remarques sur les données, par exemple sur la taille des echantillons, les notions de proportion, etc. L'idée est de mettre en avant la possibilité d'avoir des variables cachées dans les données pouvant nous tromper sur les mesures de corrélation future. Le cas le plus courant correspond au **paradoxe de Simpson**, un phénomène observé lorsque la tendance de plusieurs groupes s'inverse lorsque les groupes sont combinés :
 
-$$f<g, sup(f) < inf(g), Alors \exists (P,Q), E_P (f) > E_Q (g)$$
+$$f<g, sup(f) < inf(g), \exists (P,Q), E_P (f) > E_Q (g)$$
 
-Enfin, il est toujours possible d'ajouter des variables supplémentaires provenant d'autre base de donnée. Par exemple, nous pouvons ajouter des données géographiques d'openstreetmap [openstreetmap](https://www.data.gouv.fr/fr/datasets/decoupage-administratif-communal-francais-issu-d-openstreetmap/) ou de graphe (réseau, chaine de Markov, etc.) si le problème s'y porte bien, cela peut au moins faciliter la visualisation des données.
+Avec $\mathbb{E}[X]=\frac {\sum_{i=1}^{n} x_i P_i}{\sum_{i=1}^{n} P_i}$. Enfin, il est toujours possible d'ajouter des variables supplémentaires provenant d'autre base de donnée. Par exemple, nous pouvons ajouter des données géographiques d'openstreetmap [openstreetmap](https://www.data.gouv.fr/fr/datasets/decoupage-administratif-communal-francais-issu-d-openstreetmap/) ou de graphe (réseau, chaine de Markov, etc.) si le problème s'y porte bien, cela peut au moins faciliter la visualisation des données.
 
 ### 1-b. Data overview
 
@@ -146,14 +146,14 @@ data = [data_csv.copy(), data_xls.copy(), data_geo.copy(), data_sql.copy(), data
 
 ```python
 ## Statistique descriptive
-for d in data :
-    display(d.describe())
+for df in data :
+    display(df.describe())
 
 ## Résultat Naïf
-d[['columns1','columns2']].sum() / d['columns3'].sum()
+df[['columns1','columns2']].sum() / df['columns3'].sum()
 
 ## Tableau croisé dynamique
-d.groupby(['columns1','columns2']).agg(['mean','std'])
+df.groupby(['columns1','columns2']).agg(['mean','std'])
 ```
 
 **Observation :** Pour chacun des éléments décrire ce que l'on mesure (résultats). Enoncer si la taille des echantillons sont différents, les ecarts moyennes globale/locale, s'il y a besoin de normaliser les données.
@@ -244,7 +244,7 @@ fig,ax = plt.subplots(figsize=(10, 10))
 geodf[geodf.CODE.str[:2] != "97"].plot(ax=ax, categorical=True, column = "best_columns", legend=True)
 
 ## geographic representation up scale
-dep = geodf.dissolve(by='dep', aggfunc='sum')
+dep = geodf.dissolve(by='dep', aggfunc='sum') # attention si déjà normalisé
 dep[geodf.dep != "97"].plot(ax=ax, categorical=True, column = "best_columns", legend=True)
 
 ## network graph (social net, transport, Markov chain)
@@ -261,88 +261,258 @@ sns.catplot(data=df[['c1','c2','c3']],  kind="box")
 
 ### 1-e. Data compilation
 
+Fusionner les dataframes par la méthode d'intersection (inner : $ A \cap B = \{ x:(x \in A) \wedge (x \in B) \} $ ). Ce qui permet d'avoir la taille optimale des données ayant les meme valuers de colonne de jointure.
+
 
 ```python
 for d in dataf_list :
-    data = pd.merge(data, d, how='inner', on='ON') # automatics also with time series
+    data = pd.merge(data, d, how='inner', on='merge_column') # automatics also with time series
 # head or tail
 data.head()
 ```
 
 ## 2. Data Exploration
 
-Find interesting variables for analysis
+Explorer le jeu de donnée assemblé pour trouver les variables d'interet. Le but ici est de tester des hypothèses (correlation, multimodalité, etc.) pour la modélisation. On copie toujours le jeu de donnée compilé pour ne pas à refaire l'importation (+ probleme de pointer).
 
 
 ```python
-df = data.copy()
+df_explore = data.copy()
 ```
+
+L'ensemble des concepts vu ici sont lié au notion d'esperance et de convergence des probabilités. Pour cela, on utilise l'Inégalité de Tchebychev pour majorer un variables aléatoires à une constante :
+
+$$ \mathbb{P} \left ( \left | X \right | \geq \alpha \right ) \leq \frac{1}{\alpha^p} \mathbb{E}(\left | X \right |^p) $$ 
+
+Pour p = 1 (Markov), cela veut dire que plus l'esperance de X est petite, moins il est probable que X prenne de grandes valeurs. Pour p=2 (Bieneymé), on mesure la disperstion autour de l'esperance.
+
+On démontre cette inégalité par la fonction indicatrice $ \mathbf{1}_A(x) := \left\{\begin{matrix} 1 & x \in A\\ 0 & x \notin A \end{matrix}\right.$ car elle rempli au maximum l'espace probabilisé en question.
 
 ### 2-a. Data definition
 
-Variable target :
+**Variable target :** Correspond à la variable de sortie, la variable que l'on veut predire (on ne sait pas encore), si c'est une valeurs continu, on se tournera plutot vers un probleme de regression, si c'est une catégorie, un probleme de classification. Lister les possibilités ici.
 
 
 ```python
-print(df.shape) # row and columns
-print(df.dtypes.value_counts()) # variable type
-print((df.isna().sum()/df.shape[0]).sort_values(ascending=True)) # NaN proportion
+print(df_explore.shape) # row and columns
+df_explore.dtypes.value_counts().plot.pie() # variable type
+print((df_explore.isna().sum()/df_explore.shape[0]).sort_values(ascending=True)) # NaN proportion
 # for time series : see resample per date, rolling/ewn, FFT analysis (+possible filter)
 ```
 
+Ici énoncé les possibilité d'avoir des contraintes pour l'analyse/modélisation. Décrire successivement :
+
+- Le nombre de variable : si trop, overfitting par exemple.
+- Le nombre d'échantillon : sous echantillonnage (critere de Nyquist pour systeme temporel, intervalle de confiance pour procédé aléatoire).
+- Les différents types de variable : N floats (feature) / N objects (label) / N ints
+- La proportions d'éléments vide par variables.
+
 ### 2-b. Data relationship
 
+Evaluation des correlations entre variables, ainsi que la distribution de chaque variables suivant les targets possibles.
+
+#### (i) Correlation des données (Regression) :
+
+La mesure de corrélation entre variable est un outil/notion qui permet de mesurer la dépendance **linéaire** entre 2 variables aléatoire quantitative. Lorsque les corrélations sont comprise entre $[-0.4, 0.4]$, les varaibles ne sont pas corrélé, entre $[-0.8, -0.4[ U ]0.4, 0.8[$ faiblement (anti-)corrélé et jusqu'a -1,1, tres (anti-)corrélé. Attention, deux variables tres corrélé, ne veut pas dire relation de causalité. Partant d'un echantillon, un estimateur (biaisé) du coefficient de corrélation est donné par :
+
+$$ r = \frac {\mathbb{E}[(X - \mathbb{E} (X))(Y - \mathbb{E} (Y)) ]}{\sqrt{ V_X}  \sqrt{ V_Y}} = \frac {\mathbb{E}(XY) - \mathbb{E}(X) \mathbb{E}(Y) }{\sigma_X  \sigma_Y} = \frac {\mathrm{Cov}(X,Y) }{\sigma_X  \sigma_Y}$$
+
+Il est plus interessant de representer la matrice des correlations de maniere regroupé (cluster) de facon à identifier les variables corrélé entre elle. On parle alors de partitionnement hierarchique agglomératif : Initialement, on a $n$ partitions, on reduit le nombre de classe 2 à deux en cherchant le minimum de distance : $\min \, \{\, d(a,b) : a \in A,\, b \in B \,\}$, avec la distance euclidienne $d(a,b) = \|a-b \|_2 = \sqrt{\sum_i (a_i-b_i)^2}$.
+
 
 ```python
-corr = df.select_dtypes('float').corr()
-grid = sns.clustermap(corr) # correlation map linked by average method and euclidean metric
+## correlation matrix
+corr = df_explore.select_dtypes('float').corr()
+## visualisation and extract order list
+grid = sns.clustermap(corr, xticklabels=True)
+label_order = [xl.get_text() for xl in grid.ax_heatmap.get_xmajorticklabels()]
+```
+
+**Observation :** Indiquer les blocs de corrélation. Essayez de voir surtout si les targets features appartiennent à un cluster specifique. Si oui, il est interessant de les noter, il peuvent permettre d'avoir une idée sur la reduction de variable.
+
+##### (i-bis) Mesure specifiques relation "Feature Choix" / "Feature"
+
+La matrice de corrélation nous à donnée des indicateurs de linéarité entre l'ensemble des variables, néamoins, dans le cas de relation non linéaire (polynome, parametrique, etc.), la corrélation est nulle alors qu'il existe bien une relation de correlation. Par exemple avec une fonction de puissance $f_a(x)=x^a$, en echelle log-log, on obtiendrait la relation linéaire $log(f_a(x)) = a.log(x)$ (principe de l'astuce du noyau - partie modelisation). Ainsi, il est preferable de regarder l'ensemble des relations entre les features "target" et les autres.
+
+
+```python
+plt.rcParams.update({'figure.max_open_warning': 0})
+for col in df_explore.select_dtypes('float'):
+    (fig, ax) = plt.subplots(figsize=(5, 5))
+    ax.set_xlabel('[target1, target2]'); ax.set_ylabel(col)
+    ## relation between each point folowing i target
+    ax.scatter(df_explore['target1'], df_explore[col], alpha = 0.3)
+    ax.scatter(df_explore['target2'], df_explore[col], alpha = 0.3)
+    plt.show(); plt.close()
+```
+
+**Observation :** Noter les artefacts, les corrélations apparente, si pour ces correlations, les données sont complete ou non. Si l'on observe un grand nombre de variables avec des données complete qui correle, il est plus interessant de s'orienter vers <span style="color:red"> un probléme de régression</span>.
+
+#### (ii) Distribution des features par classes (Classification) : 
+
+La mesure des distributions par classe de donnée permets de voir s'il existe un ecart entre deux distributions. Ici nous visualisons uniquement les distributions de densité pour l'ensemble des variables. On observes souvant 2 types de loi de probabilité :
+
+- Loi Normale (continue) : $f(x) = c(\sigma).e^{r(x,\mu,\sigma)^2}$
+- Loi de Poisson (discrète) : $ \mathbb{P}(X=k)= \frac {\lambda^k}{k!}e^{-\lambda} $
+
+Lorsque le nombre de donnée est grand, on peut reduire la taille de l'echantillonnage, en calculant $N = \frac{Z^2 \sigma (1-\sigma)}{\epsilon^2}$, cette relation provient directement de l'inegalité de Bieneymé-Tchebychev (loi faible des grands nombres) et permet de definir l'intervalle de confiance d'une estimation de la moyenne. Aussi, nous pouvont representer une estimation du noyau (kde), qui consiste à construire des gaussiennes pour chacun des points de l'histogramme. (Aide principalement à la visualisation)
+
+
+```python
+# random reduction (Law of large numbers)
+reduced_df = df_explore.sample(1000, random_state=0)
+# drop all NAN
+reduced_df = df_explore.dropna()
+# verify if n > N
+reduced_df.shape
 ```
 
 
 ```python
-# complete relation ship (max columns = 20, sample dataset by 1000)
-sns.pairplot(df.sample(1000), hue="label") # histogram and all variable/variable scatter
-#sns.jointplot() # 2d histogram
+plt.rcParams.update({'figure.max_open_warning': 0})
+for col in reduced_df.select_dtypes('float'):
+    print(col)
+    sns.displot(data=reduced_df[[col,'best_columns']], x=col, hue='classification_target',
+                kde=True, element="step", stat="density", common_norm=False)
+    plt.show(); plt.close()
 ```
+
+**Observation :** Noter les variables où les distributions ne coincide pas (décalage). Si l'on observe un grand nombre de décalage, voire une séparation nettes entre beaucoup de distribution, il est plus interessant de s'orienter vers <span style="color:blue"> un probléme de classification</span>.
+
+#### (i)+(ii) Distributions bivariées
+Les deux analyses precedante peuvent etre résumé avec une visualisation des relations par paires (pairplot). Mais lorsqu'on a beaucoup de variable et d'echantillons, ils vaut mieux éviter ce type d'analyse lorsque le nombre de variable dépasse 10. Néamoins, on l'utilise lorsqu'on a la classification et la régression qui sont possible en meme temps, comme cela on peut comparer les relations avec les classifications en meme temps.
+
+
+```python
+sns.pairplot(df[interest_columns_list], hue="classification_target") 
+```
+
+**Observation :** Dans certain cas, la séparation en 2 variables peut enlever la notion de linéarité, voire inverser la tendance (paradoxe de Simpson), si c'est le cas, privilégier la classification. Par contre, si la séparation en 2 variables laisse apparaitre des tendances linéaire alors qu'il n'y en avait pas initialement, la classification est encore à privilégier, néanmoins, envisager un sous échantillonage pour faire calculer une regression est possible. Dans les cas où les relations sont évidentes, la régression est à privilégier.
+
+#### (iii) Quantile proportion (specific variable)
+
+Lorsqu'on veut quantifier la proportion d'une variable specifiant dans quel categorie appartiennent les differents echantillons, nous pouvons faire une analyse quantile. La variables en x, est un quantile représenté sous forme de valeurs entiere (valeurs max : 4 pour quartile, 10 pour decile, 100 pour centile).
+
+
+
+```python
+sns.countplot(x="int_variable", hue='classification_target', data=df_explore)
+```
+
+**Observation :** Ce type de resultats nous informe s'il y a des seuils de valeurs, ou est-ce-que les valeurs sont concentré, etc. Ce type de graphes peut etre aussi utilisé pour une analyse temporelle.
 
 ### 2-c. Data reduction visualization
 
+Lorsque le nombre des variables corrélées est grand (superieurs à 25), il existe des méthodes pour reduire la dimensionnalité du probleme. Cette méthodes consiste à projeter l'ensemble des points dans l'espace propre des covariances, on parle d'analyse en composante principale (PCA). Cette analyse décorrele les variables corrélé entres elles. À partir de la matrice de covariance, nous pouvons calculer les vecteurs de projection par le théorème de Caley-Hamilton (Polynome de matrice). On retrouve pour la premiere composante :
+
+$$ \mathbf{w}_{(1)}
+ = \arg\max_{\Vert \mathbf{w} \Vert = 1} \,\left\{ \sum_i (t_1)^2_{(i)} \right\}
+ = \arg\max_{\Vert \mathbf{w} \Vert = 1} \,\left\{ \sum_i \left(\mathbf{x}_{(i)} \cdot \mathbf{w} \right)^2 \right\}
+ = \arg\max \left\{ \frac{\mathbf{w}^\mathsf{T} \mathbf{X}^\mathsf{T} \mathbf{X w}}{\mathbf{w}^\mathsf{T} \mathbf{w}} \right\}$$
+
+Lorsque le nombres d'echantillons est tres grand (>1M) mais car on a plusieurs serie temporelle non groupé (> 1k groupes). On peut reduire l'information par une décomposition en série de fourier et extraire uniquement les composante fondamentales harmonique. Cette méthodes peut reduire de beaucoup les données si le nombre de groupe est grand, ainsi, il est preferable avant ce type d'analyse de calculer la frequence d'echantillonage de Shannon-Nyquist $F_N = \frac {f_e}{2} $, où $f_e$ est défini par """.
+
+Ici nous allons d'abords appliquer la transformations PCA, visualiser en 3D les echantillons projeté, on fini par representé la projetion des "variables" dans cette espace.
+
 
 ```python
-# standardization
-x = df.loc[:, features].values
-x = preprocessing.StandardScaler().fit_transform(x)
+# standardization (correlated_bloc without poverty)
+x = df_explore.loc[:, correlated_block].replace([np.inf, -np.inf], np.nan).dropna() # or centered fillna(0)
+x = skpp.StandardScaler().fit_transform(x)
 # PCA compression of continious variables (if unlinear : Manifold : IsoMap)
-pca = PCA(n_components=3)
+pca = PCA(n_components=0.8)
 principalComponents = pca.fit_transform(x)
-pc_df = pd.DataFrame(data = principalComponents, columns = ['PC1', 'PC2', 'PC3'])
-# adding category
-pc_df['cat'] = df['label'].astype("category")
-# 3D plot (contourf possible)
-#ax = plt.axes(projection='3d')
-#ax.scatter(pc_df['A'], pc_df['B'], pc_df['C'], c= pc_df['cat'])
-sns.scatterplot(data = pc_df, hue = "cat")
+pca_df = principalComponents[:,:3]
+# dataframe pca
+explore_df_pca = pd.DataFrame(data = pca_df, columns = ['PC1', 'PC2', 'PC3'])
+# add class
+explore_df_pca['classification_target'] = df_explore['classification_target'].astype("category")
 ```
+
+
+```python
+%matplotlib notebook
+ax = plt.axes(projection='3d')
+ax.scatter(explore_df_pca['PC1'], explore_df_pca['PC2'], explore_df_pca['PC3'], 
+           c= explore_df_pca['classification_target'].cat.codes, 
+           label = explore_df_pca['classification_target'].values)
+ax.legend()
+ax.grid(True)
+```
+
+
+```python
+# components in correlation circle
+components = pca.components_
+# dataframe
+pca_c_df = components[:3,:]
+# plot pca circle correlation
+(fig, ax) = plt.subplots(figsize=(8, 8))
+for i in range(0, pca.components_.shape[1]):
+    ax.arrow(0,0, pca.components_[0, i], pca.components_[1, i])
+    plt.text(pca.components_[0, i], pca.components_[1, i],correlated_block[i])
+```
+
+**Observations :** Le déplacement en 3D permet de trouver les plans qui peuvent séparer les données. La projection des variables dans l'espace des composantes est une autres facons d'observer les clusters de correlation. Si la PCA sépare clairement les données, il est plus interessant de travailler dans cet espace pour la modelisation d'une classification.
 
 ### 2-c. Data contingency
 
+La mesure de la contingence est realisé lorsqu'on a plusieurs variables qualitatives dans notre dataset. Elle permet d'estimer simplement en comptant, la dépendance entre deux caractere. On l'utilise aussi lorsqu'on a creer des varaibles qualitative, comme vide/non-vide, elle permet ainsi de mesurer l'effet de l'abscence d'information dans le dataset et voir si c'est homogene ou non. 
+
 
 ```python
-contigency = pd.crosstab(df['label_A'], df['label_B'])
-sns.heatmap(contigency, annot=True)
+contigency = pd.crosstab(df_explore['classification_target'], df_explore['categoryA'])
+print(df_explore['categoryA'].value_counts() , '\n')
+print(df_explore['classification_target'].value_counts())
 ```
+
+
+```python
+sns.heatmap(contigency, annot=True) # possible normalization
+```
+
+**Observation :** Lorsque les proportions de quantité change, cela implique qu'il y a un effet à quantifier et à mettre en perspective par rapport à la proportion de donnée en question. (reformuler mieux)
 
 ### 2-d. Data Test
 
+À partir des données que l'on vient de collecter, nous avons uniqument fait des observations, maintenant il faut tester nos hypotheses à partir de test inférentiel. Une des méthodes est de supposer que les 2 distributions sont identiques, on parle d'hypothèse nulle H0. Ensuite, on utilise une statistique de test qui va rejeter ou non l'hypothese. La statistique que l'on utilise est celle de la comparaison des taux moyens de 2 distributions, on l'appele de Test de Student (ou t-test). La plupart des test statistique se base sur des loi normale, ce qui est possible car l'on peut faire l'approximation de l'echantillongage de n'importe quel loi de probabilité par une loi normale :
+
+$$ \bar{X_n} = \frac {X_1+ \cdots + X_n }{n}; Z_n = \frac {S_n - n \mu  }{ \sigma \sqrt{n}};  \lim _{n \to \infty } \mathbb{P}(Z_n \leq z) = \Phi _{\textit{N}(0,1)}(z) $$
+
+Le test de student permet de comparer la moyenne d'une loi normale à une valeur si la variance est inconnue, comparaison de deux moyennes issues de deux lois normales si leurs variances sont égales et inconnues, ou si leurs variances sont différentes et inconnues (Test t de Welch), tester sur les coefficients dans le cadre d'une régression linéaire. Test sur des échantillons appariés
+
 
 ```python
-# test of independence
-c, p, dof, expected = chi2_contingency(contigency) 
-# H0 hypothesis (student)
-stat, p = ttest_ind(df_rowsA['columns'].dropna(), df_rowsB['columns'].dropna())
-# show variable
-print(f'{'' :-<50} {if p < 0.02 : 'H0 Rejetée'}')
+# balance class (choice the min size)
+df_Test = df_explore[reducted_columns].dropna()
+A = df_Test[df_Test.classification_target == 'A'].sample(1000, random_state=0)
+B = df_Test[df_Test.classification_target == 'B'].sample(1000, random_state=0)
 ```
+
+
+```python
+def t_test(df_1, df_2, col):
+    alpha = 0.02
+    stat, p = ttest_ind(df_1[col].dropna(), df_2[col].dropna())
+    if p < alpha:
+        return 'H0 Rejetée'
+    else :
+        return 0
+```
+
+
+```python
+feature_columns =  df_Test.select_dtypes('float').columns
+variables = []
+for col in feature_columns :
+    H0 = t_test(A,B,col)
+    if H0 != 0 :
+        variables += [col]
+    print(f'{col :-<50} {H0}')
+print("\n Nombres d'hypothèses rejeté : " + str(len(variables)))
+```
+
+**Observations :** Identifier les variables où le test à été rejeté, cela implique qu'ils sont statistiquement significatifs. En générale, cela confirme les hypotheses que l'on avait exploré auparavant. Il serait interessant aussi de classer l'ordre de la valeur p obtenu par le test de Student (à ajouter, code à corriger, surtout partit random).
 
 ## 3. Data preprocessing
 
@@ -605,9 +775,6 @@ Possible amelioration (if more time)
 plot_var = {'df': 0 }
 %store plot_var
 ```
-
-
-
 
 ---
 
