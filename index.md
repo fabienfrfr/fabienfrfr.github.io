@@ -4,7 +4,7 @@ I am a complex systems physicist with a particular interest in interdisciplinary
 
 See me Heroku Python Web app [here](https://fabienfrfr.herokuapp.com)
 
-![DATAProtocol](/STEP.svg)
+![DATAProtocol](/ML_LANDSCAPE.svg.svg)
 
 
 You can use the [editor on GitHub](https://github.com/fabienfrfr/fabienfrfr.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
