@@ -8,5 +8,3 @@
 layout: default
 
 ---
-
-## Welcome to My GitHub Pages

@@ -1,6 +1,6 @@
 # Site
 repository: sproogen/resume-theme
-favicon: images/favicon.ico
+favicon: fab fa-github
 
 # Content configuration version
 version: 2
@@ -73,20 +73,20 @@ content:
           I started this project as a way if learning <mark>PyTorch</mark> and applied mathematics in neural network. I have learned many skills through this and been I'm very proud of having this in my portfolio.
           
 - layout: top-middle
-        title: An Artificial Neural Network Functionalized by Evolution
+        title: How to illustrate the beauty of mathematics?
         link: github.com/fabienfrfr
         # link_text: Project Website
         additional_links:
-          - title:  fabienfrfr/AFF
+          - title:  fabienfrfr/INSTA
             icon: fab fa-github
-            url: github.com/fabienfrfr/AFF
+            url: github.com/fabienfrfr/INSTA
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
           #   url: Link to project (eg. sproogen.github.io/modern-resume-theme)
         quote: >
-          This is some of the most interesting research I have been able to conduct. (with my thesis, of course)
+          Finding a way to mix animation art and math and can be a good way to put yourself in a mathematician's shoes when looking at shapes.
         description: | # this will include new lines to allow paragraphs
-          I started this project as a way if learning <mark>PyTorch</mark> and applied mathematics in neural network. I have learned many skills through this and been I'm very proud of having this in my portfolio.
+          This project was carried out during the covid period after my thesis. It was a good way to get back to an old passion, drawing. Each of the animations illustrates fundamental physics problems of complex systems.
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
