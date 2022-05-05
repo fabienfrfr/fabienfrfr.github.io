@@ -1,6 +1,6 @@
 # Site
 repository: sproogen/resume-theme
-favicon: fab fa-github
+favicon: images/favicon.png
 
 # Content configuration version
 version: 2
