@@ -7,6 +7,6 @@
 #
 layout: default
 
-## Welcome to My GitHub Pages
-
 ---
+
+## Welcome to My GitHub Pages
