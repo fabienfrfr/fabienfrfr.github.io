@@ -78,7 +78,7 @@ content:
         # link_text: Project Website
         additional_links:
           - title:  fabienfrfr/INSTA
-            icon: fab fa-github
+            icon: fab fa-instagram
             url: github.com/fabienfrfr/INSTA
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
