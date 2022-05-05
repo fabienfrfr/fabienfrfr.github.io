@@ -58,12 +58,12 @@ content:
     content:
       - layout: top-middle
         title: An Artificial Neural Network Functionalized by Evolution
-        link: github.com/fabienfrfr
+        link: github.com/fabienfrfr/AFF
         # link_text: Project Website
         additional_links:
           - title:  fabienfrfr/AFF
-            icon: fab fa-github
-            url: github.com/fabienfrfr/AFF
+            icon: fab fa-globe
+            url: arxiv.org/
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
           #   url: Link to project (eg. sproogen.github.io/modern-resume-theme)
@@ -74,12 +74,12 @@ content:
           
       - layout: top-middle
         title: How to illustrate the beauty of mathematics?
-        link: github.com/fabienfrfr
+        link: github.com/fabienfrfr/INSTA
         # link_text: Project Website
         additional_links:
           - title:  fabienfrfr/INSTA
             icon: fab fa-instagram
-            url: github.com/fabienfrfr/INSTA
+            url: www.instagram.com/fabienfrfr
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
           #   url: Link to project (eg. sproogen.github.io/modern-resume-theme)
