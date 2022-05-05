@@ -62,7 +62,7 @@ content:
         # link_text: Project Website
         additional_links:
           - title:  fabienfrfr/AFF
-            icon: fab fa-globe
+            icon: fab fa-sistrix
             url: arxiv.org/
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
@@ -125,7 +125,7 @@ content:
       - CrossFit
       - Volunteering
 
-      An overview when we mix code, art and mathematics
+      Also, an overview when we mix code, art and mathematics
       
       ![Instagram](/images/Sprite_landscape.jpg "Trees")
 
