@@ -102,7 +102,7 @@ content:
             icon: fab fa-sistrix
             url: hal.archives-ouvertes.fr/tel-03405136/
         quote: >
-          Characterization of the NODAL signaling pathway during embryonic stem cell differentiation. It's a way to control cell differentiation trajectory. Management : Benoit Sorre and Pascal Hersen.
+          Characterization of the NODAL signaling pathway during embryonic stem cell differentiation. It's a way to control cell differentiation trajectory. Management : <mark>Benoit Sorre</mark> and <mark>Pascal Hersen</mark>.
         description: | # this will include new lines to allow paragraphs
             The aim of this work was to study the influence of the temporal stimulation of different morphogens on the expression of the "Nodal" locus and on the differentiation of stem cells. To control the temporal profile of the morphogen concentration sent to cells, we use an automated microfluidic cell culture chip that allows us to observe individual cell responses in real time with the fluorescence microscope. For this work, you need to have great skills in engineering, adaptability and image analysis.
 
@@ -117,14 +117,14 @@ content:
         quote: >
           Established in 1808, the agrégation is a competitive examination for civil service in the French public education system.
         description: | # this will include new lines to allow paragraphs
-          During my learning of neural networks and machine learning, I took advantage of my year for a complete refresher in mathematics. I did not validate the competition, but this learning allowed me to be completely up to date on the theory of neural networks and machine learning.
+          During my learning of neural networks and machine learning, I took advantage of my year for a complete refresher in mathematics. I didn't validate the competition, but this learning allowed me to be completely up to date on the theory of neural networks and machine learning.
 
   - title: A Little More About Me
     layout: text
     content: | # this will include new lines to allow paragraphs
       Alongside my interests in networks, research and engineering, some of my other interests and hobbies are:
       - Creative Coding
-      - Build Educational Game [See Here](https://fabienfrfr.itch.io/break-the-brain)
+      - Build <mark>Educational Game</mark> [See Here](https://fabienfrfr.itch.io/break-the-brain)
       - Hiking
       - Cycling
       - CrossFit
@@ -132,7 +132,7 @@ content:
 
       Also, an overview when we mix code, art and mathematics
       
-      ![Instagram](/images/Sprite_landscape.jpg "Trees")
+      ![Instagram](/images/Sprite_landscape.jpg "arcimboldo&fourier")
 
 # Footer
 footer_show_references: true
