@@ -50,7 +50,7 @@ about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
   Hi, my name's Fabien and I'm a complex systems physicist with a particular interest in interdisciplinary projects. I am interested in machine learning, data innovation and skills sharing. Today, I apply my skills in data analysis and machine learning.
   
-  I am most skilled in: <mark>Python</mark> and <mark>Eating Pizza</mark>.
+  I am most skilled in: <mark>Python</mark> and <mark>Modelization</mark>.
 
 content:
   - title: Projects # Title for the section
@@ -97,6 +97,10 @@ content:
         # link_text: boringcompany.com
         sub_title: PhD in Biophysics
         caption: September 2015 - September 2019
+        additional_links:
+          - title:  HAL/Thesis
+            icon: fab fa-sistrix
+            url: hal.archives-ouvertes.fr/tel-03405136/
         quote: >
           Characterization of the NODAL signaling pathway during embryonic stem cell differentiation. It's a way to control cell differentiation trajectory.
         description: | # this will include new lines to allow paragraphs
