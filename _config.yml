@@ -102,7 +102,7 @@ content:
             icon: fab fa-sistrix
             url: hal.archives-ouvertes.fr/tel-03405136/
         quote: >
-          Characterization of the NODAL signaling pathway during embryonic stem cell differentiation. It's a way to control cell differentiation trajectory.
+          Characterization of the NODAL signaling pathway during embryonic stem cell differentiation. It's a way to control cell differentiation trajectory. Management : Benoit Sorre and Pascal Hersen.
         description: | # this will include new lines to allow paragraphs
             The aim of this work was to study the influence of the temporal stimulation of different morphogens on the expression of the "Nodal" locus and on the differentiation of stem cells. To control the temporal profile of the morphogen concentration sent to cells, we use an automated microfluidic cell culture chip that allows us to observe individual cell responses in real time with the fluorescence microscope. For this work, you need to have great skills in engineering, adaptability and image analysis.
 
