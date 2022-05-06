@@ -100,7 +100,7 @@ content:
         quote: >
           Characterization of the NODAL signaling pathway during embryonic stem cell differentiation. It's a way to control cell differentiation trajectory.
         description: | # this will include new lines to allow paragraphs
-            (Thesis resume and skills) Every company needs its networks properly administered and The Boring Compay is no exception. Digging holes is hard and I play my part making sure the whole company stays connected. I lead a team of 5 people and enjoy driving the company to try new technologies.
+            The aim of this work was to study the influence of the temporal stimulation of different morphogens on the expression of the "Nodal" locus and on the differentiation of stem cells. To control the temporal profile of the morphogen concentration sent to cells, we use an automated microfluidic cell culture chip that allows us to observe individual cell responses in real time with the fluorescence microscope. For this work, you need to have great skills in engineering, adaptability and image analysis.
 
   - title: Education # Title for the section
     layout: list # Type of content section (list/text)
