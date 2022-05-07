@@ -119,6 +119,20 @@ content:
         description: | # this will include new lines to allow paragraphs
           During my learning of neural networks and machine learning, I took advantage of my year for a complete refresher in mathematics. I didn't validate the competition, but this learning allowed me to be completely up to date on the theory of neural networks and machine learning.
 
+  - title: Publications # Title for the section
+    layout: list # Type of content section (list/text)
+    content:
+      - layout: left
+        title: Matière et Systèmes Complexes Lab
+        caption: 2015
+        sub_title: Vincent Fleury
+        quote: >
+          EPJE Article : Buckling along boundaries of elastic contrast as a mechanism for early vertebrate morphogenesis.
+        description: | # this will include new lines to allow paragraphs
+          We have investigated the mechanism of formation of the body of a typical vertebrate, the chicken. We find that the body forms initially by folding at boundaries of stiffness contrast. These boundaries are dynamic lines, separating domains of different cell sizes, that are advected in a deterministic thin-film visco-elastic flow.
+
+
+
   - title: A Little More About Me
     layout: text
     content: | # this will include new lines to allow paragraphs
