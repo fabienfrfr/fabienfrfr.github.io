@@ -123,11 +123,11 @@ content:
     layout: list # Type of content section (list/text)
     content:
       - layout: left
-        title: Matière et Systèmes Complexes Lab
+        title: EPJE Article
         caption: 2015
         sub_title: Vincent Fleury
         quote: >
-          EPJE Article : Buckling along boundaries of elastic contrast as a mechanism for early vertebrate morphogenesis.
+          Buckling along boundaries of elastic contrast as a mechanism for early vertebrate morphogenesis.
         description: | # this will include new lines to allow paragraphs
           We have investigated the mechanism of formation of the body of a typical vertebrate, the chicken. We find that the body forms initially by folding at boundaries of stiffness contrast. These boundaries are dynamic lines, separating domains of different cell sizes, that are advected in a deterministic thin-film visco-elastic flow.
 
