@@ -126,6 +126,11 @@ content:
         title: EPJE Article
         caption: 2015
         sub_title: Vincent Fleury
+        additional_links:
+          - title:  EPJE/Article
+            icon: fab fa-sistrix
+            url: link.springer.com/article/10.1140/epje/i2015-15006-7
+        quote: >
         quote: >
           Buckling along boundaries of elastic contrast as a mechanism for early vertebrate morphogenesis.
         description: | # this will include new lines to allow paragraphs
