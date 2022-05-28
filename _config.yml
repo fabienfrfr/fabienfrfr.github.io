@@ -50,7 +50,7 @@ about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
   Hi, my name's Fabien and I'm a complex systems physicist with a particular interest in interdisciplinary projects. I am interested in machine learning, data innovation and skills sharing. Today, I apply my skills in data analysis and machine learning.
   
-  I am most skilled in: <mark>Python</mark> and <mark>Modelization</mark>.
+  I am most skilled in: <mark>Python</mark>, <mark>Modelization</mark> and <mark>Computer Vision</mark>.
 
 content:
   - title: Projects # Title for the section
@@ -63,7 +63,7 @@ content:
         additional_links:
           - title:  fabienfrfr/AFF
             icon: fab fa-sistrix
-            url: arxiv.org/
+            url: https://arxiv.org/abs/2205.10118
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
           #   url: Link to project (eg. sproogen.github.io/modern-resume-theme)
