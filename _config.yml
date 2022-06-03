@@ -87,6 +87,17 @@ content:
           Finding a way to mix animation art and math and can be a good way to put yourself in a mathematician's shoes when looking at shapes.
         description: | # this will include new lines to allow paragraphs
           This project was carried out during the covid period after my thesis. It was a good way to get back to an old passion, drawing. Each of the animations illustrates fundamental <mark>Physics</mark> problems of complex systems.
+      
+      - layout: top-middle
+        title: Other personal projects
+        content: | # this will include new lines to allow paragraphs
+      Alongside my interests in networks, research and engineering, some of my other interests and hobbies are:
+      - Creative Coding
+      - Build <mark>Educational Game</mark> [See Here](https://fabienfrfr.itch.io/break-the-brain)
+      - Hiking
+      - Cycling
+      - CrossFit
+      - Volunteering
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
