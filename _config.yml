@@ -91,8 +91,8 @@ content:
       - layout: top-middle
         title: Other personal projects
         description: | # this will include new lines to allow paragraphs
-          - DNA analysis
-          - Predict images
+          - Analysis of DNA and ancestry test kit : From the result of test (MyHeritage, 23andme, etc.), we obtain a list of single nucleotide polymorphism (SNP). With that, we can extract genome information. (WebScrapping, )
+          - Using YOLO algorithm for artistics projects.
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
