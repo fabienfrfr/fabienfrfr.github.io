@@ -88,10 +88,8 @@ content:
         description: | # this will include new lines to allow paragraphs
           This project was carried out during the covid period after my thesis. It was a good way to get back to an old passion, drawing. Each of the animations illustrates fundamental <mark>Physics</mark> problems of complex systems.
       
-      - layout: text
+      - layout: top-middle
         title: Other personal projects
-        content: | # this will include new lines to allow paragraphs
-          - Creative Coding
 
 
   - title: Experience # Title for the section
