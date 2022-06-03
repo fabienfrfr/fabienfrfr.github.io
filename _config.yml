@@ -7,7 +7,7 @@ version: 2
 
 # Personal info
 name: Furfaro Fabien
-title: Data Scientist - Independent Researcher
+title: Data & Computer Vision Scientist - Independent Researcher
 email: fabien.furfaro@gmail.com
 website: fabienfrfr.herokuapp.com
 
@@ -50,7 +50,7 @@ about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
   Hi, my name's Fabien and I'm a complex systems physicist with a particular interest in interdisciplinary projects. I am interested in machine learning, data innovation and skills sharing. Today, I apply my skills in data analysis and machine learning.
   
-  I am most skilled in: <mark>Python</mark>, <mark>Modelization</mark> and <mark>Computer Vision</mark>.
+  I am most skilled in: <mark>Python</mark> and <mark>Modelization</mark>.
 
 content:
   - title: Projects # Title for the section
