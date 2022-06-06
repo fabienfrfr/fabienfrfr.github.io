@@ -91,8 +91,8 @@ content:
       - layout: top-middle
         title: Other personal projects
         description: | # this will include new lines to allow paragraphs
-          - Analysis of DNA and ancestry test kit : From the result of test (MyHeritage, 23andme, etc.), we obtain a list of single nucleotide polymorphism (SNP). With that, we can extract genome information. (WebScrapping, )
-          - Using YOLO algorithm for artistics projects.
+          - Genome analysis: Using data from an ancestry test kit (MyHeritage, 23andme, etc.), for each nucliotide polymorphism, I extracted information from a genome database (Web Scraping).
+          - Convolutional neural networks that build a "work" of art: Decomposition of the detection analysis steps of the YOLO algorithm, of the semantic segmentation of U-Net and the annotation captionning (LSTM) for title.
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
