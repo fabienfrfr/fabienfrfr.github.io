@@ -92,7 +92,7 @@ content:
         title: Other personal projects
         description: | # this will include new lines to allow paragraphs
           - Genome analysis: Using data from an ancestry test kit (MyHeritage, 23andme, etc.), for each nucliotide polymorphism, I extracted information from a genome database (Web Scraping).
-          - Convolutional neural networks that build a "work" of art: Decomposition of the detection analysis steps of the YOLO algorithm, of the semantic segmentation of U-Net and the annotation captionning (LSTM) for title.
+          - How does an artificial neural network understand an image? Animate step of a learning process that automatically annotated images caption and where each step of the process is represented (encoding by resnet and decoding by attention-lstm).
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
