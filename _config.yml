@@ -58,10 +58,10 @@ content:
     content:
       - layout: top-middle
         title: An Artificial Neural Network Functionalized by Evolution
-        link: github.com/fabienfrfr/AFF
+        link: github.com/fabienfrfr/functionalfilet
         # link_text: Project Website
         additional_links:
-          - title:  fabienfrfr/AFF
+          - title:  fabienfrfr/functionalfilet
             icon: fab fa-sistrix
             url: https://arxiv.org/abs/2205.10118
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
