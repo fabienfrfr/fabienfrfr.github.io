@@ -48,7 +48,7 @@ additional_links:
 # about_title: About Me
 about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
-  Hi, my name's Fabien and I'm a complex systems physicist with a particular interest in interdisciplinary projects. I am interested in machine learning, data innovation and skills sharing. Today, I apply my skills in data analysis and machine learning.
+  Hi, my name's Fabien and I am a physicist specializing in complex systems, with a strong passion for interdisciplinary innovation. My expertise lies in artificial intelligence and machine learning, which I apply to drive innovation in engineering solutions. Currently, I utilize my skills at Capgemini Engineering to design, simulate, and prototype advanced AI-driven systems that enhance efficiency and performance across various engineering domains.
   
   I am most skilled in: <mark>Python</mark> and <mark>Modelization</mark>.
 
