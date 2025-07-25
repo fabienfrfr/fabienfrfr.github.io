@@ -4,3 +4,17 @@
 _site
 Gemfile.lock
 *.code-workspace
+
+*.log
+*.out
+*.fls
+*.aux
+*.synctex.gz
+*.fdb_latexmk
+*.bbl
+*.blg
+*.toc
+*.vrb
+*.snm
+*.nav
+*.pytxcode
