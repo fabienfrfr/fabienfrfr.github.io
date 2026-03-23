@@ -56,6 +56,56 @@ content:
   - title: Projects # Title for the section
     layout: list # Type of content section (list/text)
     content:
+
+      - layout: top-middle
+        title: TPTT - Transforming Pretrained Transformers into Titans
+        link: github.com/fabienfrfr/TPTT
+        additional_links:
+          - title: arXiv:2506.17671
+            icon: fab fa-sistrix
+            url: https://arxiv.org/abs/2506.17671
+        quote: >
+          Optimizing LLMs by converting quadratic attention into linear-attention (LiZA) with internal memory gating.
+        description: |
+          Framework designed to augment pretrained <mark>Transformers</mark> with linearized attention and <mark>Memory as Gate</mark> (MaG) without full retraining, achieving up to 20% improvement in efficiency and accuracy on benchmarks like MMLU.
+
+      - layout: top-middle
+        title: PixelBytes - Unified Multimodal Representation Learning
+        link: github.com/fabienfrfr/PixelBytes
+        additional_links:
+          - title: arXiv:2410.01820
+            icon: fab fa-sistrix
+            url: https://arxiv.org/abs/2410.01820
+        quote: >
+          Integrating text, audio, and pixelated images into a cohesive autoregressive representation.
+        description: |
+          Exploration of <mark>Multimodal Foundation Models</mark> using SSMs, RNNs, and Attention-based architectures. Application of <mark>Diffusion Models</mark> to control problems and parallelized generation on specific datasets.
+
+      - layout: top-middle
+        title: L-Architecte (TheArchitect)
+        link: github.com/fabienfrfr/L-Architecte
+        additional_links:
+          - title: Live Demo
+            icon: fas fa-globe
+            url: https://thearchitect.dev
+        quote: >
+          Local-first multi-agent system automating the SDLC from specs to SOLID code.
+        description: |
+          Orchestration of <mark>Multi-Agent Systems</mark> via Pydantic AI and Graph to transform requirements into production-ready solutions using high-performance <mark>Local LLMs</mark> and a NiceGUI interface.
+
+      - layout: top-middle
+        title: Competitive Dynamics of AGI-Driven Automation
+        link: researchsquare.com/article/rs-8408333/v1
+        additional_links:
+          - title: ResearchSquare / Preprint
+            icon: fab fa-sistrix
+            url: https://www.researchsquare.com/article/rs-8408333/v1
+        quote: >
+          Modeling automation as a non-cooperative game to explore how competitive pressure drives AGI adoption.
+        description: |
+          Development of a <mark>Microsimulation Framework</mark> showing that unregulated competition can lead to socially suboptimal automation levels. This study motivates the need for <mark>Universal Basic Income</mark> mechanisms funded by AGI-generated rents.
+    
+      
       - layout: top-middle
         title: An Artificial Neural Network Functionalized by Evolution
         link: github.com/fabienfrfr/functionalfilet
